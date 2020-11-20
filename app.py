@@ -1,6 +1,6 @@
 TAMANHO_GOL = 7
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
@@ -20,7 +20,6 @@ class Player(db.Model):
     name = db.Column(db.String(80), nullable=False)
     club = db.Column(db.String(120), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    distance = db.Column(db.Integer, nullable=False)
 
 
 def calculate(pos):
@@ -30,19 +29,25 @@ def calculate(pos):
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    players = Player.query.all()
     if request.method == "POST":
         form = request.form
-        distance = form["distance"]
-        player = Player(name=form["name"], club=form["club"], age=form["age"], distance=distance)
-        db.session.add(player)
-        db.session.commit()
-        return str(calculate(distance))
-    players = Player.query.all()
-    results = [
-        {"name": player.name, "age": player.age, "club": player.club, "distance": player.distance}
-        for player in players
-    ]
-    return {"count": len(results), "players": results}
+        pos = form.get("playerPosition")
+        if pos:
+            angle = round(calculate(pos), 2)
+            return render_template(
+                "index.html", players=players, player=form.get("playerSelection"), angle=angle
+            )
+        else:
+            player = Player(
+                name=form.get("name"),
+                club=form.get("club"),
+                age=form.get("age"),
+            )
+            db.session.add(player)
+            db.session.commit()
+            return redirect("/")
+    return render_template("index.html", players=players, player="", angle="")
 
 
 if __name__ == "__main__":

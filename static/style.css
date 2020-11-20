@@ -1,0 +1,40 @@
+nav {
+    margin-bottom: 10px;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+
+.playerPosition_card {
+    width: 15rem;
+    float: right;
+    margin-right: 20%;
+}
+
+.playerName_card {
+    width: 15rem;
+    margin-left: 20%;
+}
+
+.main_box {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.addPlayer_btn {
+    float: right;
+}
+
+.players_table {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+/* Efeito borrado quando abre a caixa de créditos e adicionar jogador */
+.fade {
+    backdrop-filter: blur(5px);
+}
